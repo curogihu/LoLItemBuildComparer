@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/import/summoner', function () {
+    return view('import.importSummoner');
+});

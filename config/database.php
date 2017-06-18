@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', getenv('DB_CONNECTION')),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,15 +38,16 @@ return [
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
         ],
+// getenv('DB_CONNECTION')
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
+            'host' => env('DB_HOST', getenv('DB_HOST')),
+            'port' => env('DB_PORT', getenv('DB_PORT')),
+            'database' => env('DB_DATABASE', getenv('DB_DATABASE')),
+            'username' => env('DB_USERNAME', getenv('DB_USERNAME')),
+            'password' => env('DB_PASSWORD', getenv('DB_PASSWORD')),
+            'unix_socket' => env('DB_SOCKET', getenv('DB_SOCKECT')),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',

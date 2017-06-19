@@ -26,6 +26,6 @@ class CreateHighRankedPlayers extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('high_ranked_players');
     }
 }

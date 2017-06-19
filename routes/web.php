@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/*
 Route::get('/import/summoner', function () {
     return view('import.importSummoner');
 });
+*/
+Route::get('/import/summoners/challenger', 'ImportJsonController@importChallengers');
+
+Route::get('/test', 'SummonerController@store');

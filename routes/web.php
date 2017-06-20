@@ -22,5 +22,6 @@ Route::get('/import/summoner', function () {
 */
 Route::get('/import/summoners/challenger', 'ImportJsonController@importChallengers');
 Route::get('/import/summoners/master', 'ImportJsonController@importMasters');
+Route::get('/import/summoners/account_id', 'ImportJsonController@importAccountIds');
 
 Route::get('/test', 'SummonerController@store');

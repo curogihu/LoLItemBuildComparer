@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Summoner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ImportJsonController extends Controller
 {
@@ -83,12 +84,16 @@ class ImportJsonController extends Controller
         Summoner::chunk(100, function ($summoners) {
 
 			foreach ($summoners as $summoner) {
-			  	# code...
+				$url = str_replace("[summoner_id]",
+									str($summoner->summoner_id),
+									$targetText);
+
+			  	Log::info('Try to access url: ' . $url);
 			} 
 		});
 
 		// $json = $this->retrieveRiotJson($url);
-
+/*
 		if($json === false) {
 			exit;
 		}		
@@ -100,7 +105,7 @@ class ImportJsonController extends Controller
         	// $summoner->account_id = null;
         	$summoner->save();
 		}
-
+*/
 		echo "success";
     }
 

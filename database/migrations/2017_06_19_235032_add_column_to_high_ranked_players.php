@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHighRankedPlayers extends Migration
+class AddColumnToHighRankedPlayers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateHighRankedPlayers extends Migration
      */
     public function up()
     {
-        Schema::create('high_ranked_players', function (Blueprint $table) {
-            $table->bigInteger("summoner_id");
-            $table->string('tier');
+        Schema::table('high_ranked_players', function (Blueprint $table) {
+            $table->bigInteger("account_id")->nullable()->default(null);
         });
     }
 
@@ -26,6 +25,6 @@ class CreateHighRankedPlayers extends Migration
      */
     public function down()
     {
-        Schema::drop('high_ranked_players');
+        //
     }
 }

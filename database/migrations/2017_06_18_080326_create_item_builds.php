@@ -14,7 +14,7 @@ class CreateItemBuilds extends Migration
     public function up()
     {
         Schema::create('item_builds', function (Blueprint $table) {
-            $table->bigIncrements("match_id");
+            $table->bigInteger("match_id");
             $table->integer('main_version');
             $table->integer('sub_version');
             $table->integer('champion_id');

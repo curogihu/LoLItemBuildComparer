@@ -15,9 +15,7 @@ class ImportJsonController extends Controller
      */
     public function importChallengers()
     {
-        //$api_key = DB::table('api_key')->value('own_api_key');
         $api_key = env('RIOT_GAME_API_KEY');
-        // echo $api_key;
         $url = "https://na.api.riotgames.com/api/lol/NA/v2.5/league/challenger?type=RANKED_SOLO_5x5&api_key=" . $api_key;
 
         // $obj = json_decode(file_get_contents($url), true);
@@ -35,9 +33,71 @@ class ImportJsonController extends Controller
 			// $summoner = new Summoner;
 			$summoner_id = $summoner_info['playerOrTeamId'];
 
-			$summoner App\Summoner::firstOrNew(['summoner_id' => $summoner_id])
+			$summoner = App\Summoner::firstOrNew(['summoner_id' => $summoner_id]);
         	// $summoner->summoner_id = $summoner_info['playerOrTeamId'];
         	$summoner->tier = 'challenger';
+        	$summoner->save();
+		}
+
+		echo "success";
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function importMasters()
+    {
+        $api_key = env('RIOT_GAME_API_KEY');
+        $url = "https://na.api.riotgames.com/api/lol/NA/v2.5/league/master?type=RANKED_SOLO_5x5&api_key=" . $api_key;
+
+		$json = $this->retrieveRiotJson($url);
+
+		if($json === false) {
+			exit;
+		}		
+
+		foreach ($json['entries'] as $summoner_info) {
+			$summoner = new Summoner;
+			$summoner->summoner_id = $summoner_info['playerOrTeamId'];
+        	$summoner->tier = 'master';
+        	// $summoner->account_id = null;
+        	$summoner->save();
+		}
+
+		echo "success";
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function importAccountIds()
+    {
+        $api_key = env('RIOT_GAME_API_KEY');
+        $base_url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/[summoner_id]?api_key=" . $api_key;
+
+		// $summoners = Summoner::all();
+        Summoner::chunk(100, function ($summoners) {
+
+			foreach ($summoners as $summoner) {
+			  	# code...
+			} 
+		});
+
+		// $json = $this->retrieveRiotJson($url);
+
+		if($json === false) {
+			exit;
+		}		
+
+		foreach ($json['entries'] as $summoner_info) {
+			$summoner = new Summoner;
+			$summoner->summoner_id = $summoner_info['playerOrTeamId'];
+        	$summoner->tier = 'master';
+        	// $summoner->account_id = null;
         	$summoner->save();
 		}
 
@@ -52,6 +112,9 @@ class ImportJsonController extends Controller
 		    'http' => array('ignore_errors' => true)
 		));
 		$response = file_get_contents($url, false, $context);
+
+		// stop 1.5 seconds
+		usleep(1500000);
 
 		preg_match('/HTTP\/1\.[0|1|x] ([0-9]{3})/', $http_response_header[0], $matches);
 		$status_code = intval($matches[1]);
@@ -72,9 +135,11 @@ class ImportJsonController extends Controller
 		    // rate limit exceeded
 		    case 429:
 		    	// have to some seconds
+		    	return false;
 		    	break;
 
 		    case (ceil($status_code / 100) === 5):
+		    	return false;
 				// have to some seconds
 				break;
 
